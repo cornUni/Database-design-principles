@@ -1,0 +1,69 @@
+##################
+9931099
+Amirfazel koozegar
+DB_HW3
+###################
+
+
+5.1
+SELECT title FROM Movie
+WHERE director = "Spielberg Steven";
+
+5.2
+SELECT DISTINCT year FROM Movie natural join Rating
+WHERE stars = 4 or stars =5
+ORDER BY stars ASC
+
+5.3
+SELECT DISTINCT title FROM Movie natural join Rating
+WHERE stars = 0
+
+5.4
+SELECT DISTINCT name
+FROM Reviewer natural join Rating
+WHERE name in (SELECT ratingDate
+	       FROM Reviewer natural join Rating 
+	       WHERE ratingDate = null)
+5.5
+SELECT name, title, stars, ratingDate
+FROM (	SELECT *
+	FROM Reviewer natural join Rating,Movie
+	WHERE Movie.mID = Rating.mID
+	)
+ORDER BY name, title, stars
+
+5.6
+SELECT R.name, R.title
+FROM((SELECT *
+	FROM Reviewer natural join Rating,Movie
+	WHERE Movie.mID = Rating.mID) as P),
+(SELECT *
+	FROM Reviewer natural join Rating,Movie
+	WHERE Movie.mID = Rating.mID) as R)
+WHERE R.mId = P.mID and R.rID=P.rID and R.stars>P.stars and R.ratingDate>P.ratingDate
+
+5.7
+SELECT title, max(stars)
+FROM Movie natural join Rating
+GROUP BY title
+ORDER BY title
+
+5.8
+SELECT title, (max(stars) - min (stars)) as "spread rating"
+FROM Movie natural join Rating
+GROUP BY title
+ORDER BY title ASC, (max(stars) - min (stars)) DESC
+
+6.1
+INSERT INTO College values ('Carnegie Mellon', 'PA', 11500)
+
+6.2
+SELECT sID
+FROM Apply
+WHERE major = "CS" and cName = "Mellon Carnegie" and decision = null
+
+6.3
+DELETE from Student
+WHERE sID in (SELECT DISTINCT sID, count(major)
+		FROM Apply
+		having count(major)>2 )
